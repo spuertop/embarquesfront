@@ -1,5 +1,5 @@
 <template>
-  <q-page class="flex-center q-ma-md">
+  <q-page class="flex-center q-pa-md">
     <div class="text-center text-h4 text-weight-bold">
       Cliente
     </div>

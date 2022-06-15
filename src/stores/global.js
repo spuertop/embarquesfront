@@ -12,6 +12,7 @@ export const useGlobalStore = defineStore('useGlobalStore', {
     customersList: [],
     customer: null,
     aedocument: null,
+    aeinfo: null,
     token: null,
   }),
   getters: {
@@ -50,6 +51,45 @@ export const useGlobalStore = defineStore('useGlobalStore', {
     },
     setCustomer(customer) {
       this.customer = customer;
+      this.router.push('/documents')
+    },
+    async getDeliveryInfo(ob) {
+      try {
+        this.setHeaders();
+        const res = await api.get("/delivery", { params: ob })
+        this.aeinfo = res.data;
+        this.router.push('/readings')
+      } catch (error) {
+        return error.response.data.error
+      }
+    },
+    async uploadUnit(ob) {
+      try {
+        this.setHeaders();
+        const res = await api.put('/upload', ob);
+        this.aeinfo.lecturas.map((item) => {
+          if (item.Descripcion === ob.ud) {
+            item.NroDS = true;
+          }
+        })
+      } catch (error) {
+        return error.response.data.error
+      }
+    },
+    async downloadUnit(ob) {
+      try {
+        this.setHeaders();
+        const res = await api.put('/download', ob);
+        this.aeinfo.lecturas.map((item) => {
+          if (item.Descripcion === ob.ud) {
+            item.NroDS = null;
+          }
+        })
+      } catch (error) {
+        return error.response.data.error
+      }
+    },
+    changeAE() {
       this.router.push('/documents')
     }
   }
