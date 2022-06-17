@@ -11,7 +11,7 @@
       <q-radio v-model="action" :class="action === 'download' ? 'text-primary' : 'text-grey-5'" checked-icon="task_alt"
         unchecked-icon="panorama_fish_eye" val="download" label="Descargar" @click="returnFocus" />
       <q-radio v-model="action" :class="action === 'photo' ? 'text-primary' : 'text-grey-5'" checked-icon="task_alt"
-        unchecked-icon="panorama_fish_eye" val="photo" label="Fotografiar" />
+        unchecked-icon="panorama_fish_eye" val="photo" label="Fotografiar" @click="this.$router.push('/photos')" />
     </div>
     <div class="q-pa-sm" style="font-size: 20px">
       <div class="row items-center">
@@ -37,7 +37,7 @@
       <q-linear-progress :value="progress" rounded stripe size="15px" color="positive" class="q-mt-sm" />
 
       <q-slide-transition>
-        <div v-show="visible" class="text-center q-pa-sm">
+        <div v-show="visibleEnd" class="text-center q-pa-sm">
           <span class="text-h3">Todo Cargado
             <q-icon color="positive" name="check_circle" />
           </span>
@@ -75,6 +75,7 @@
 </template>
 <script>
 import { useGlobalStore } from "src/stores/global";
+import { useRouter } from 'vue-router'
 import { ref } from '@vue/reactivity';
 import { useQuasar } from 'quasar';
 import { computed } from '@vue/runtime-core';
@@ -82,8 +83,12 @@ import { computed } from '@vue/runtime-core';
 
 export default {
   setup() {
+    const router = useRouter();
     const globalStore = useGlobalStore();
     const action = ref('load');
+    if (router.currentRoute.value.query.action) {
+      action.value = router.currentRoute.value.query.action
+    }
     const barcode = ref('');
     const barcodeinput = ref(null);
     const audioError = new Audio('../mixkit-wrong-long-buzzer-954.wav');
@@ -112,7 +117,7 @@ export default {
         return 'Fotografiar'
       }
     })
-    const visible = computed(() => {
+    const visibleEnd = computed(() => {
       let total = globalStore.aeinfo.lecturas.length;
       let uploads = (globalStore.aeinfo.lecturas.filter(item => item.NroDS === true)).length;
       if (uploads / total === 1) {
@@ -138,6 +143,8 @@ export default {
           console.log(error);
           returnFocus();
         }
+        //setEstilos
+
       }
     }
     function checkBarcode(action) {
@@ -185,7 +192,7 @@ export default {
       alertMsg,
       playError,
       nuevaEntrega,
-      visible
+      visibleEnd
     }
   }
 }
