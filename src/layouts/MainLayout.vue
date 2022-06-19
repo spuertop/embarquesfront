@@ -52,6 +52,12 @@ const linksList = [
     icon: 'logout',
     link: '/logout'
   },
+  {
+    title: 'Photo',
+    caption: 'Photo camera',
+    icon: 'photo_camera',
+    link: '/photos'
+  },
 
 ]
 

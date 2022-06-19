@@ -53,8 +53,6 @@
 <script>
 import { useGlobalStore } from "src/stores/global";
 import { ref } from '@vue/reactivity';
-import { useQuasar } from 'quasar';
-import { computed } from '@vue/runtime-core';
 
 export default {
   setup() {
