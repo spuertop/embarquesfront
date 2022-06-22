@@ -25,27 +25,33 @@
     <!-- CAMARA -->
     <div class="flex flex-center q-ma-sm web-camera-container">
       <q-spinner-hourglass v-show="isCameraOpen && isLoading" color="accent" size="4em" />
-      <div v-if="isCameraOpen" v-show="!isLoading" class="camera-shutter">
-        <video class="video" v-show="!isPhotoTaken" ref="camera" autoplay></video>
-        <canvas v-show="isPhotoTaken" id="photoTaken" ref="canvas" :width="250" :height="337.5"></canvas>
+      <div class="video" v-if="isCameraOpen" v-show="!isLoading">
+        <!-- <video v-show="!isPhotoTaken" ref="camera" autoplay :height="322.5" :width="430"></video> -->
+        <video v-show="!isPhotoTaken" ref="camera" autoplay :height="322.5" :width="430"></video>
+        <canvas v-show="isPhotoTaken" id="photoTaken" ref="canvas" :height="322.5" :width="430"></canvas>
       </div>
     </div>
-    <div class="camera-button">
+    <!-- <div class="camera-button">
       <button type="button" class="button is-rounded"
         :class="{ 'is-primary': !isCameraOpen, 'is-danger': isCameraOpen }" @click="toggleCamera">
         <span v-if="!isCameraOpen">Abrir cámara</span>
         <span v-else>Cerrar cámara</span>
       </button>
+    </div> -->
+    <div v-if="isCameraOpen && !isLoading && !isPhotoTaken">
+      <q-icon @click="takePhoto" name="photo_camera"></q-icon>
     </div>
-    <div v-if="isCameraOpen && !isLoading" class="camera-shoot">
-      <button type="button" class="button" @click="takePhoto">
-        Take a photo
-      </button>
+    <div v-if="isCameraOpen && !isLoading && isPhotoTaken">
+      <q-icon name="cancel" color="negative" @click="takePhoto" />
     </div>
     <div v-if="isPhotoTaken && isCameraOpen" class="camera-download">
-      <a id="downloadPhoto" download="my-photo.jpg" class="button" role="button" @click="downloadImage">
-        Download
+      <a id="downloadPhoto" download="my-photo.jpg" role="button" @click="downloadImage">
+
+        <q-icon name="check_circle" color="positive" />
       </a>
+      <!-- <a id="downloadPhoto" download="my-photo.jpg" class="button" role="button" @click="downloadImage">
+        Guardar foto
+      </a> -->
     </div>
   </q-page>
 </template>
@@ -76,6 +82,7 @@ export default {
         createCameraElement();
       }
     }
+    toggleCamera();
 
     function createCameraElement() {
       isLoading.value = true;
@@ -91,7 +98,7 @@ export default {
         })
         .catch(error => {
           isLoading.value = false;
-          alert('Some errors')
+          alert('Some errors', error)
         })
     }
 
@@ -112,7 +119,8 @@ export default {
       }
       isPhotoTaken.value = !isPhotoTaken.value;
       const context = canvas.value.getContext('2d');
-      context.drawImage(camera.value, 0, 0, 450, 337.5);
+      //context.drawImage(camera.value, 0, 0, 450, 337.5);
+      context.drawImage(camera.value, 0, 0, 430, 322.5);
     }
     function downloadImage() {
       const download = document.getElementById("downloadPhoto");
@@ -135,7 +143,7 @@ export default {
 
 </script>
 <style lang="scss" scoped>
-.video {
+.capture {
   max-width: 89vw;
   max-height: 91vh;
 }

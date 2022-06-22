@@ -13,7 +13,7 @@
       <q-radio v-model="action" :class="action === 'photo' ? 'text-primary' : 'text-grey-5'" checked-icon="task_alt"
         unchecked-icon="panorama_fish_eye" val="photo" label="Fotografiar" @click="this.$router.push('/photos')" />
     </div>
-    <div class="q-pa-sm" style="font-size: 20px">
+    <div class="q-pa-sm" style="font-size: 16px">
       <div class="row items-center">
         <div class="col-3">Albarán</div>
         <div class="col">
@@ -38,7 +38,7 @@
 
       <q-slide-transition>
         <div v-show="visibleEnd" class="text-center q-pa-sm">
-          <span class="text-h3">Todo Cargado
+          <span class="text-h5">Todo Cargado
             <q-icon color="positive" name="check_circle" />
           </span>
         </div>
@@ -77,9 +77,7 @@
 import { useGlobalStore } from "src/stores/global";
 import { useRouter } from 'vue-router'
 import { ref } from '@vue/reactivity';
-import { useQuasar } from 'quasar';
 import { computed } from '@vue/runtime-core';
-
 
 export default {
   setup() {
@@ -178,6 +176,9 @@ export default {
     function nuevaEntrega() {
       globalStore.changeAE();
     }
+    function hideKeyboard() {
+      Keyboard.hide();
+    }
     return {
       globalStore,
       action,
@@ -193,6 +194,7 @@ export default {
       playError,
       nuevaEntrega,
       visibleEnd
+
     }
   }
 }
