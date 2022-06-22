@@ -1,0 +1,7 @@
+{
+  "appId": "mdk.embarques.app",
+  "appName": "MDKBoarding",
+  "bundledWebRuntime": false,
+  "npmClient": "npm",
+  "webDir": "www"
+}

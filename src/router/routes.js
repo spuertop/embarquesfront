@@ -8,7 +8,7 @@ const routes = [
       { path: '/customers', component: () => import('src/pages/CustomersPage.vue') },
       { path: '/documents', component: () => import('src/pages/DocumentPage.vue') },
       { path: '/readings', component: () => import('src/pages/ReadingPage.vue') },
-      { path: '/photos', component: () => import('src/pages/CameraPage.vue') },
+      { path: '/photos', component: () => import('src/pages/PhotoPage.vue') },
     ]
   },
 

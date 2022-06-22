@@ -1,6 +1,6 @@
 <template>
   <q-page class="flex-center q-pa-md">
-    <div class="text-center text-h4 text-weight-bold">
+    <div class="text-center text-h5 text-weight-bold">
       <q-icon name="photo_camera" />
       Fotografiar {{ globalStore.customer }}
       <q-icon name="photo_camera" />

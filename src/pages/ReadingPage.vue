@@ -1,6 +1,6 @@
 <template>
   <q-page class="flex-center q-pa-md">
-    <div class="text-center text-h4 text-weight-bold">
+    <div class="text-center text-h5 text-weight-bold">
       <q-icon :name="radioIcons" />
       {{ radioText }} {{ globalStore.customer }}
       <q-icon :name="radioIcons" />
@@ -13,23 +13,23 @@
       <q-radio v-model="action" :class="action === 'photo' ? 'text-primary' : 'text-grey-5'" checked-icon="task_alt"
         unchecked-icon="panorama_fish_eye" val="photo" label="Fotografiar" @click="this.$router.push('/photos')" />
     </div>
-    <div class="q-pa-sm" style="font-size: 16px">
+    <div class="q-pa-none" style="font-size: 16px">
       <div class="row items-center">
         <div class="col-3">Albarán</div>
         <div class="col">
-          <q-input dense square outlined standout="text-black" v-model="globalStore.aedocument" disable />
+          <q-input dense v-model="globalStore.aedocument" disable />
         </div>
       </div>
       <div class="row items-center">
         <div class="col-3">Agencia</div>
         <div class="col">
-          <q-input dense square outlined v-model="globalStore.aeinfo.agencia.CodigoDeServicioDeTransporte" disable />
+          <q-input dense v-model="globalStore.aeinfo.agencia.CodigoDeServicioDeTransporte" disable />
         </div>
       </div>
       <div class="row items-center">
-        <div class="col-3">Cod.Barras</div>
+        <div class="col-3">Barras</div>
         <div class="col">
-          <q-input dense square v-model="barcode" autofocus ref="barcodeinput" @keyup.enter="readBarcode" />
+          <q-input dense v-model="barcode" ref="barcodeinput" @keyup.enter="readBarcode" />
         </div>
       </div>
     </div>
@@ -44,13 +44,11 @@
         </div>
       </q-slide-transition>
 
-      <q-scroll-area class="q-pt-sm" style="height: 52vh; max-width: 95vw;">
-        <q-chip size="xl" v-for="item in globalStore.aeinfo.lecturas" :key="item.Descripcion"
-          :color="item.NroDS ? 'positive' : ''" text-color="white">
+      <q-scroll-area class="q-pt-xs" style="height: 38vh; max-width: 95vw;">
+        <q-chip size="md" v-for="item in globalStore.aeinfo.lecturas" :key="item.Descripcion"
+          :color="item.NroDS ? action === 'load' ? 'positive' : 'primary' : ''" text-color="white">
           {{ item.Descripcion2 }}
         </q-chip>
-        <!--         <span>{{ progress }}</span>
-        <span>{{ globalStore.aeinfo }}</span> -->
       </q-scroll-area>
     </div>
     <!-- ALERT ERRORS -->
@@ -77,7 +75,8 @@
 import { useGlobalStore } from "src/stores/global";
 import { useRouter } from 'vue-router'
 import { ref } from '@vue/reactivity';
-import { computed } from '@vue/runtime-core';
+import { computed, onMounted } from '@vue/runtime-core';
+import { Keyboard } from '@capacitor/keyboard'
 
 export default {
   setup() {
@@ -124,10 +123,16 @@ export default {
         return false
       }
     })
+
+    Keyboard.addListener('keyboardWillShow', returnFocus);
+    Keyboard.addListener('keyboardDidShow', returnFocus);
+
     function returnFocus() {
       barcode.value = '';
       barcodeinput.value.focus();
+      Keyboard.hide();
     }
+
     async function readBarcode() {
       let ob = { ae: globalStore.aedocument, ud: barcode.value, empresa: globalStore.customer }
       if (checkBarcode(action.value)) {
@@ -176,9 +181,10 @@ export default {
     function nuevaEntrega() {
       globalStore.changeAE();
     }
-    function hideKeyboard() {
-      Keyboard.hide();
-    }
+
+    onMounted(() => {
+      returnFocus();
+    })
     return {
       globalStore,
       action,

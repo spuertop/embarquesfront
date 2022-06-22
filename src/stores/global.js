@@ -14,6 +14,7 @@ export const useGlobalStore = defineStore('useGlobalStore', {
     aedocument: null,
     aeinfo: null,
     token: null,
+    photoList: []
   }),
   getters: {
   },
@@ -91,6 +92,28 @@ export const useGlobalStore = defineStore('useGlobalStore', {
     },
     changeAE() {
       this.router.push('/documents')
+    },
+    async uploadPhoto(photo) {
+      try {
+        this.setHeaders();
+        await api.post('/postphoto', { customer: this.customer, aedocument: this.aedocument, photo: photo })
+      } catch (error) {
+        return error.response.data.error
+      }
+    },
+    async getPhotos() {
+      try {
+        this.setHeaders();
+        this.photoList = [];
+        const res = await api.get("/getphotos", { params: { ae: this.aedocument } })
+        let counter = 1;
+        for (let i = 0; i < res.data.length; i++) {
+          this.photoList.push({ id: counter, src: 'http://192.168.1.38:3000/' + this.aedocument + '/' + res.data[i] });
+          counter++;
+        }
+      } catch (error) {
+        return error.response.data.error
+      }
     }
   }
 })

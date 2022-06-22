@@ -15,36 +15,19 @@
 
 import { Quasar } from 'quasar'
 import { markRaw } from 'vue'
-import AppComponent from 'app/src/App.vue'
+import RootComponent from 'app/src/App.vue'
 
 import createStore from 'app/src/stores/index'
 import createRouter from 'app/src/router/index'
 
 
   
-  import { Plugins } from '@capacitor/core'
-  const { SplashScreen } = Plugins
+  import '@capacitor/core'
+    
+    
   
 
 
-
-import { defineComponent, h, onMounted } from 'vue'
-const RootComponent = defineComponent({
-  name: 'AppWrapper',
-  setup (props) {
-    onMounted(() => {
-      
-      SplashScreen.hide()
-      
-
-      
-
-      
-    })
-
-    return () => h(AppComponent, props)
-  }
-})
 
 
 
