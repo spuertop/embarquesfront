@@ -12,7 +12,6 @@ node_modules
 /src-cordova/www
 
 # Capacitor related directories and files
-/src-capacitor/www
 /src-capacitor/node_modules
 
 # Log files

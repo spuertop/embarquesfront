@@ -108,7 +108,7 @@ export const useGlobalStore = defineStore('useGlobalStore', {
         const res = await api.get("/getphotos", { params: { ae: this.aedocument } })
         let counter = 1;
         for (let i = 0; i < res.data.length; i++) {
-          this.photoList.push({ id: counter, src: 'http://192.168.1.38:3000/' + this.aedocument + '/' + res.data[i] });
+          this.photoList.push({ id: counter, src: 'http://172.18.10.150:4002/' + this.aedocument + '/' + res.data[i] });
           counter++;
         }
       } catch (error) {
