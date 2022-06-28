@@ -23,6 +23,11 @@ export default {
   setup() {
     const globalStore = useGlobalStore();
     globalStore.getAllCustomers();
+    globalStore.customer = null;
+    globalStore.aedocument = null;
+    globalStore.aeinfo = null;
+    globalStore.photoList = [];
+
     function selectedCustomer(item) {
       globalStore.setCustomer(item.Empresa)
     }

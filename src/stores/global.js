@@ -41,6 +41,19 @@ export const useGlobalStore = defineStore('useGlobalStore', {
       this.token = sessionStorage.getItem('token');
       api.defaults.headers.common['Authorization'] = this.token;
     },
+    logOut() {
+      sessionStorage.clear();
+      this.token = null;
+      api.defaults.headers.common['Authorization'] = null;
+      this.usersList = [];
+      this.userName = null;
+      this.customersList = [];
+      this.customer = null;
+      this.aedocument = null;
+      this.aeinfo = null;
+      this.photoList = [];
+      this.router.push('/');
+    },
     async getAllCustomers() {
       try {
         this.setHeaders();
@@ -90,8 +103,14 @@ export const useGlobalStore = defineStore('useGlobalStore', {
         return error.response.data.error
       }
     },
-    changeAE() {
-      this.router.push('/documents')
+    async changeAE() {
+      await this.getPhotos();
+      let hayLeidos = this.aeinfo.lecturas.filter(item => item.NroDS === true);
+      if (hayLeidos.length >= 1 && this.photoList.length < 1) {
+        return { msg: "Haz una foto" }
+      } else {
+        this.router.push('/documents')
+      }
     },
     async uploadPhoto(photo) {
       try {
@@ -105,11 +124,13 @@ export const useGlobalStore = defineStore('useGlobalStore', {
       try {
         this.setHeaders();
         this.photoList = [];
-        const res = await api.get("/getphotos", { params: { ae: this.aedocument } })
-        let counter = 1;
-        for (let i = 0; i < res.data.length; i++) {
-          this.photoList.push({ id: counter, src: 'http://172.18.10.150:4002/' + this.aedocument + '/' + res.data[i] });
-          counter++;
+        if (this.aedocument) {
+          const res = await api.get("/getphotos", { params: { ae: this.aedocument } })
+          let counter = 1;
+          for (let i = 0; i < res.data.length; i++) {
+            this.photoList.push({ id: counter, src: 'http://172.18.10.150:4002/' + this.aedocument + '/' + res.data[i] });
+            counter++;
+          }
         }
       } catch (error) {
         return error.response.data.error

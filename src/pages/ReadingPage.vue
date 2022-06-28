@@ -5,7 +5,7 @@
       {{ radioText }} {{ globalStore.customer }}
       <q-icon :name="radioIcons" />
     </div>
-    <div class="text-center">
+    <div class="text-center" style="font-size: 16px">
       <q-radio v-model="action" :class="action === 'load' ? 'text-primary' : 'text-grey-5'" checked-icon="task_alt"
         unchecked-icon="panorama_fish_eye" val="load" label="Cargar" @click="returnFocus" />
       <q-radio v-model="action" :class="action === 'download' ? 'text-primary' : 'text-grey-5'" checked-icon="task_alt"
@@ -16,20 +16,16 @@
     <div class="q-pa-none" style="font-size: 16px">
       <div class="row items-center">
         <div class="col-3">Albarán</div>
-        <div class="col">
-          <q-input dense v-model="globalStore.aedocument" disable />
-        </div>
+        <div class="col">{{ globalStore.aedocument }}</div>
       </div>
       <div class="row items-center">
         <div class="col-3">Agencia</div>
-        <div class="col">
-          <q-input dense v-model="globalStore.aeinfo.agencia.CodigoDeServicioDeTransporte" disable />
-        </div>
+        <div class="col">{{ globalStore.aeinfo.agencia.CodigoDeServicioDeTransporte }}</div>
       </div>
       <div class="row items-center">
         <div class="col-3">Barras</div>
         <div class="col">
-          <q-input dense v-model="barcode" ref="barcodeinput" @keyup.enter="readBarcode" />
+          <q-input class="no-margin no-padding" dense v-model="barcode" ref="barcodeinput" @keyup.enter="readBarcode" />
         </div>
       </div>
     </div>
@@ -178,8 +174,13 @@ export default {
     function playError() {
       audioError.play();
     }
-    function nuevaEntrega() {
-      globalStore.changeAE();
+    async function nuevaEntrega() {
+      const res = await globalStore.changeAE();
+      if (res !== undefined) {
+        alertMsg.value = 'Haz mínimo una foto'
+        alert.value = true;
+        audioError.play();
+      }
     }
 
     onMounted(() => {
