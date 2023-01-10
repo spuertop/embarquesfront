@@ -3,5 +3,8 @@
 	"appName": "MDKBoarding",
 	"bundledWebRuntime": false,
 	"npmClient": "npm",
-	"webDir": "www"
+	"webDir": "www",
+	"server": {
+		"url": "http://172.18.10.150:4002"
+	}
 }
